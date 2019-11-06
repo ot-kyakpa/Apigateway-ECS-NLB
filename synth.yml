@@ -1,0 +1,741 @@
+Resources:
+  newVPC896C2675:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.10.10.0/24
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value: ApigatewayStack/newVPC
+    Metadata:
+      aws:cdk:path: ApigatewayStack/newVPC/Resource
+  newVPCPublicSubnet1Subnet93607E23:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.10.10.0/26
+      VpcId:
+        Ref: newVPC896C2675
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: ApigatewayStack/newVPC/PublicSubnet1
+        - Key: aws-cdk:subnet-name
+          Value: Public
+        - Key: aws-cdk:subnet-type
+          Value: Public
+    Metadata:
+      aws:cdk:path: ApigatewayStack/newVPC/PublicSubnet1/Subnet
+  newVPCPublicSubnet1RouteTableCD20A022:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: newVPC896C2675
+      Tags:
+        - Key: Name
+          Value: ApigatewayStack/newVPC/PublicSubnet1
+    Metadata:
+      aws:cdk:path: ApigatewayStack/newVPC/PublicSubnet1/RouteTable
+  newVPCPublicSubnet1RouteTableAssociationB35D8530:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: newVPCPublicSubnet1RouteTableCD20A022
+      SubnetId:
+        Ref: newVPCPublicSubnet1Subnet93607E23
+    Metadata:
+      aws:cdk:path: ApigatewayStack/newVPC/PublicSubnet1/RouteTableAssociation
+  newVPCPublicSubnet1DefaultRoute37E2AAB9:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: newVPCPublicSubnet1RouteTableCD20A022
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: newVPCIGW37639F66
+    DependsOn:
+      - newVPCVPCGW41E8772F
+    Metadata:
+      aws:cdk:path: ApigatewayStack/newVPC/PublicSubnet1/DefaultRoute
+  newVPCPublicSubnet1EIP3DD1564D:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+    Metadata:
+      aws:cdk:path: ApigatewayStack/newVPC/PublicSubnet1/EIP
+  newVPCPublicSubnet1NATGateway1BD748CA:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+          - newVPCPublicSubnet1EIP3DD1564D
+          - AllocationId
+      SubnetId:
+        Ref: newVPCPublicSubnet1Subnet93607E23
+      Tags:
+        - Key: Name
+          Value: ApigatewayStack/newVPC/PublicSubnet1
+    Metadata:
+      aws:cdk:path: ApigatewayStack/newVPC/PublicSubnet1/NATGateway
+  newVPCPublicSubnet2Subnet43B01A97:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.10.10.64/26
+      VpcId:
+        Ref: newVPC896C2675
+      AvailabilityZone:
+        Fn::Select:
+          - 1
+          - Fn::GetAZs: ""
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: ApigatewayStack/newVPC/PublicSubnet2
+        - Key: aws-cdk:subnet-name
+          Value: Public
+        - Key: aws-cdk:subnet-type
+          Value: Public
+    Metadata:
+      aws:cdk:path: ApigatewayStack/newVPC/PublicSubnet2/Subnet
+  newVPCPublicSubnet2RouteTable974C1EB2:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: newVPC896C2675
+      Tags:
+        - Key: Name
+          Value: ApigatewayStack/newVPC/PublicSubnet2
+    Metadata:
+      aws:cdk:path: ApigatewayStack/newVPC/PublicSubnet2/RouteTable
+  newVPCPublicSubnet2RouteTableAssociation81AC3E1C:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: newVPCPublicSubnet2RouteTable974C1EB2
+      SubnetId:
+        Ref: newVPCPublicSubnet2Subnet43B01A97
+    Metadata:
+      aws:cdk:path: ApigatewayStack/newVPC/PublicSubnet2/RouteTableAssociation
+  newVPCPublicSubnet2DefaultRoute45093092:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: newVPCPublicSubnet2RouteTable974C1EB2
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: newVPCIGW37639F66
+    DependsOn:
+      - newVPCVPCGW41E8772F
+    Metadata:
+      aws:cdk:path: ApigatewayStack/newVPC/PublicSubnet2/DefaultRoute
+  newVPCPublicSubnet2EIP19A0F823:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+    Metadata:
+      aws:cdk:path: ApigatewayStack/newVPC/PublicSubnet2/EIP
+  newVPCPublicSubnet2NATGatewayB59F9BEC:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+          - newVPCPublicSubnet2EIP19A0F823
+          - AllocationId
+      SubnetId:
+        Ref: newVPCPublicSubnet2Subnet43B01A97
+      Tags:
+        - Key: Name
+          Value: ApigatewayStack/newVPC/PublicSubnet2
+    Metadata:
+      aws:cdk:path: ApigatewayStack/newVPC/PublicSubnet2/NATGateway
+  newVPCPrivateSubnet1SubnetF82F549C:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.10.10.128/26
+      VpcId:
+        Ref: newVPC896C2675
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: ApigatewayStack/newVPC/PrivateSubnet1
+        - Key: aws-cdk:subnet-name
+          Value: Private
+        - Key: aws-cdk:subnet-type
+          Value: Private
+    Metadata:
+      aws:cdk:path: ApigatewayStack/newVPC/PrivateSubnet1/Subnet
+  newVPCPrivateSubnet1RouteTable0A03BD50:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: newVPC896C2675
+      Tags:
+        - Key: Name
+          Value: ApigatewayStack/newVPC/PrivateSubnet1
+    Metadata:
+      aws:cdk:path: ApigatewayStack/newVPC/PrivateSubnet1/RouteTable
+  newVPCPrivateSubnet1RouteTableAssociation4BDBD3AC:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: newVPCPrivateSubnet1RouteTable0A03BD50
+      SubnetId:
+        Ref: newVPCPrivateSubnet1SubnetF82F549C
+    Metadata:
+      aws:cdk:path: ApigatewayStack/newVPC/PrivateSubnet1/RouteTableAssociation
+  newVPCPrivateSubnet1DefaultRouteCAD29FBF:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: newVPCPrivateSubnet1RouteTable0A03BD50
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: newVPCPublicSubnet1NATGateway1BD748CA
+    Metadata:
+      aws:cdk:path: ApigatewayStack/newVPC/PrivateSubnet1/DefaultRoute
+  newVPCPrivateSubnet2Subnet1C3C39BC:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.10.10.192/26
+      VpcId:
+        Ref: newVPC896C2675
+      AvailabilityZone:
+        Fn::Select:
+          - 1
+          - Fn::GetAZs: ""
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: ApigatewayStack/newVPC/PrivateSubnet2
+        - Key: aws-cdk:subnet-name
+          Value: Private
+        - Key: aws-cdk:subnet-type
+          Value: Private
+    Metadata:
+      aws:cdk:path: ApigatewayStack/newVPC/PrivateSubnet2/Subnet
+  newVPCPrivateSubnet2RouteTable7FAA315C:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: newVPC896C2675
+      Tags:
+        - Key: Name
+          Value: ApigatewayStack/newVPC/PrivateSubnet2
+    Metadata:
+      aws:cdk:path: ApigatewayStack/newVPC/PrivateSubnet2/RouteTable
+  newVPCPrivateSubnet2RouteTableAssociationBD6B94F9:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: newVPCPrivateSubnet2RouteTable7FAA315C
+      SubnetId:
+        Ref: newVPCPrivateSubnet2Subnet1C3C39BC
+    Metadata:
+      aws:cdk:path: ApigatewayStack/newVPC/PrivateSubnet2/RouteTableAssociation
+  newVPCPrivateSubnet2DefaultRoute473D0911:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: newVPCPrivateSubnet2RouteTable7FAA315C
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: newVPCPublicSubnet2NATGatewayB59F9BEC
+    Metadata:
+      aws:cdk:path: ApigatewayStack/newVPC/PrivateSubnet2/DefaultRoute
+  newVPCIGW37639F66:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: ApigatewayStack/newVPC
+    Metadata:
+      aws:cdk:path: ApigatewayStack/newVPC/IGW
+  newVPCVPCGW41E8772F:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId:
+        Ref: newVPC896C2675
+      InternetGatewayId:
+        Ref: newVPCIGW37639F66
+    Metadata:
+      aws:cdk:path: ApigatewayStack/newVPC/VPCGW
+  myClusterF713C8C6:
+    Type: AWS::ECS::Cluster
+    Metadata:
+      aws:cdk:path: ApigatewayStack/myCluster/Resource
+  tempMyFargateServiceLBEA4E0DFE:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Scheme: internal
+      SecurityGroups:
+        - Fn::GetAtt:
+            - tempMyFargateServiceLBSecurityGroup0C416E02
+            - GroupId
+      Subnets:
+        - Ref: newVPCPrivateSubnet1SubnetF82F549C
+        - Ref: newVPCPrivateSubnet2Subnet1C3C39BC
+      Type: application
+    Metadata:
+      aws:cdk:path: ApigatewayStack/temp_MyFargateService/LB/Resource
+  tempMyFargateServiceLBSecurityGroup0C416E02:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Automatically created Security Group for ELB ApigatewayStacktempMyFargateServiceLB20ADF3CC
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow from anyone on port 80
+          FromPort: 80
+          IpProtocol: tcp
+          ToPort: 80
+      VpcId:
+        Ref: newVPC896C2675
+    Metadata:
+      aws:cdk:path: ApigatewayStack/temp_MyFargateService/LB/SecurityGroup/Resource
+  tempMyFargateServiceLBSecurityGrouptoApigatewayStacktempMyFargateServiceSecurityGroupA431DFF680C258D939:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      GroupId:
+        Fn::GetAtt:
+          - tempMyFargateServiceLBSecurityGroup0C416E02
+          - GroupId
+      IpProtocol: tcp
+      Description: Load balancer to target
+      DestinationSecurityGroupId:
+        Fn::GetAtt:
+          - tempMyFargateServiceSecurityGroup27AD2F8D
+          - GroupId
+      FromPort: 80
+      ToPort: 80
+    Metadata:
+      aws:cdk:path: ApigatewayStack/temp_MyFargateService/LB/SecurityGroup/to ApigatewayStacktempMyFargateServiceSecurityGroupA431DFF6:80
+  tempMyFargateServiceLBPublicListener9E1B0BCA:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - TargetGroupArn:
+            Ref: tempMyFargateServiceLBPublicListenerECSGroup22A6E33E
+          Type: forward
+      LoadBalancerArn:
+        Ref: tempMyFargateServiceLBEA4E0DFE
+      Port: 80
+      Protocol: HTTP
+    Metadata:
+      aws:cdk:path: ApigatewayStack/temp_MyFargateService/LB/PublicListener/Resource
+  tempMyFargateServiceLBPublicListenerECSGroup22A6E33E:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      TargetType: ip
+      VpcId:
+        Ref: newVPC896C2675
+    Metadata:
+      aws:cdk:path: ApigatewayStack/temp_MyFargateService/LB/PublicListener/ECSGroup/Resource
+  tempMyFargateServiceTaskDefTaskRole8602923B:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: ApigatewayStack/temp_MyFargateService/TaskDef/TaskRole/Resource
+  tempMyFargateServiceTaskDef050991BA:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+        - Essential: true
+          Image: amazon/amazon-ecs-sample
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group:
+                Ref: tempMyFargateServiceTaskDefwebLogGroupB83D1757
+              awslogs-stream-prefix: temp_MyFargateService
+              awslogs-region:
+                Ref: AWS::Region
+          Name: web
+          PortMappings:
+            - ContainerPort: 80
+              Protocol: tcp
+      Cpu: "512"
+      ExecutionRoleArn:
+        Fn::GetAtt:
+          - tempMyFargateServiceTaskDefExecutionRole17765EFA
+          - Arn
+      Family: ApigatewayStacktempMyFargateServiceTaskDef7208545F
+      Memory: "256"
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      TaskRoleArn:
+        Fn::GetAtt:
+          - tempMyFargateServiceTaskDefTaskRole8602923B
+          - Arn
+    Metadata:
+      aws:cdk:path: ApigatewayStack/temp_MyFargateService/TaskDef/Resource
+  tempMyFargateServiceTaskDefwebLogGroupB83D1757:
+    Type: AWS::Logs::LogGroup
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: ApigatewayStack/temp_MyFargateService/TaskDef/web/LogGroup/Resource
+  tempMyFargateServiceTaskDefExecutionRole17765EFA:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: ApigatewayStack/temp_MyFargateService/TaskDef/ExecutionRole/Resource
+  tempMyFargateServiceTaskDefExecutionRoleDefaultPolicyCA13AFD5:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - tempMyFargateServiceTaskDefwebLogGroupB83D1757
+                - Arn
+        Version: "2012-10-17"
+      PolicyName: tempMyFargateServiceTaskDefExecutionRoleDefaultPolicyCA13AFD5
+      Roles:
+        - Ref: tempMyFargateServiceTaskDefExecutionRole17765EFA
+    Metadata:
+      aws:cdk:path: ApigatewayStack/temp_MyFargateService/TaskDef/ExecutionRole/DefaultPolicy/Resource
+  tempMyFargateService76EF43F5:
+    Type: AWS::ECS::Service
+    Properties:
+      TaskDefinition:
+        Ref: tempMyFargateServiceTaskDef050991BA
+      Cluster:
+        Ref: myClusterF713C8C6
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 50
+      DesiredCount: 2
+      EnableECSManagedTags: false
+      HealthCheckGracePeriodSeconds: 60
+      LaunchType: FARGATE
+      LoadBalancers:
+        - ContainerName: web
+          ContainerPort: 80
+          TargetGroupArn:
+            Ref: tempMyFargateServiceLBPublicListenerECSGroup22A6E33E
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: DISABLED
+          SecurityGroups:
+            - Fn::GetAtt:
+                - tempMyFargateServiceSecurityGroup27AD2F8D
+                - GroupId
+          Subnets:
+            - Ref: newVPCPrivateSubnet1SubnetF82F549C
+            - Ref: newVPCPrivateSubnet2Subnet1C3C39BC
+    DependsOn:
+      - tempMyFargateServiceLBPublicListenerECSGroup22A6E33E
+      - tempMyFargateServiceLBPublicListener9E1B0BCA
+    Metadata:
+      aws:cdk:path: ApigatewayStack/temp_MyFargateService/Service/Service
+  tempMyFargateServiceSecurityGroup27AD2F8D:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: ApigatewayStack/temp_MyFargateService/Service/SecurityGroup
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      VpcId:
+        Ref: newVPC896C2675
+    Metadata:
+      aws:cdk:path: ApigatewayStack/temp_MyFargateService/Service/SecurityGroup/Resource
+  tempMyFargateServiceSecurityGroupfromApigatewayStacktempMyFargateServiceLBSecurityGroup16807CD280CE25F778:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      IpProtocol: tcp
+      Description: Load balancer to target
+      FromPort: 80
+      GroupId:
+        Fn::GetAtt:
+          - tempMyFargateServiceSecurityGroup27AD2F8D
+          - GroupId
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - tempMyFargateServiceLBSecurityGroup0C416E02
+          - GroupId
+      ToPort: 80
+    Metadata:
+      aws:cdk:path: ApigatewayStack/temp_MyFargateService/Service/SecurityGroup/from ApigatewayStacktempMyFargateServiceLBSecurityGroup16807CD2:80
+  nlbC39469D4:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Scheme: internet-facing
+      Subnets:
+        - Ref: newVPCPublicSubnet1Subnet93607E23
+        - Ref: newVPCPublicSubnet2Subnet43B01A97
+      Type: network
+    DependsOn:
+      - newVPCPublicSubnet1DefaultRoute37E2AAB9
+      - newVPCPublicSubnet2DefaultRoute45093092
+    Metadata:
+      aws:cdk:path: ApigatewayStack/nlb/Resource
+  nlbListenerED2D2BEF:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - TargetGroupArn:
+            Ref: nlbListenerFargateALBGroupB325B0B6
+          Type: forward
+      LoadBalancerArn:
+        Ref: nlbC39469D4
+      Port: 443
+      Protocol: TCP
+    Metadata:
+      aws:cdk:path: ApigatewayStack/nlb/Listener/Resource
+  nlbListenerFargateALBGroupB325B0B6:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: TCP
+      VpcId:
+        Ref: newVPC896C2675
+    Metadata:
+      aws:cdk:path: ApigatewayStack/nlb/Listener/FargateALBGroup/Resource
+  tempAPI425274BC:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: temp_API
+    Metadata:
+      aws:cdk:path: ApigatewayStack/temp_API/Resource
+  tempAPIDeployment45A5887F920d5fc98499cf6566ac893a22131dfb:
+    Type: AWS::ApiGateway::Deployment
+    Properties:
+      RestApiId:
+        Ref: tempAPI425274BC
+      Description: Automatically created by the RestApi construct
+    DependsOn:
+      - tempAPIdevGETB0DAEB39
+      - tempAPIdev8DA4D893
+      - tempAPIGET6B0376E5
+    Metadata:
+      aws:cdk:path: ApigatewayStack/temp_API/Deployment/Resource
+  tempAPIDeploymentStageprod0CF6067C:
+    Type: AWS::ApiGateway::Stage
+    Properties:
+      RestApiId:
+        Ref: tempAPI425274BC
+      DeploymentId:
+        Ref: tempAPIDeployment45A5887F920d5fc98499cf6566ac893a22131dfb
+      MethodSettings:
+        - DataTraceEnabled: true
+          HttpMethod: "*"
+          LoggingLevel: INFO
+          ResourcePath: /*
+      StageName: prod
+    Metadata:
+      aws:cdk:path: ApigatewayStack/temp_API/DeploymentStage.prod/Resource
+  tempAPICloudWatchRole40C546D3:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: apigateway.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
+    Metadata:
+      aws:cdk:path: ApigatewayStack/temp_API/CloudWatchRole/Resource
+  tempAPIAccount7AE4B68B:
+    Type: AWS::ApiGateway::Account
+    Properties:
+      CloudWatchRoleArn:
+        Fn::GetAtt:
+          - tempAPICloudWatchRole40C546D3
+          - Arn
+    DependsOn:
+      - tempAPI425274BC
+    Metadata:
+      aws:cdk:path: ApigatewayStack/temp_API/Account
+  tempAPIGET6B0376E5:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: GET
+      ResourceId:
+        Fn::GetAtt:
+          - tempAPI425274BC
+          - RootResourceId
+      RestApiId:
+        Ref: tempAPI425274BC
+      AuthorizationType: NONE
+      Integration:
+        Type: MOCK
+    Metadata:
+      aws:cdk:path: ApigatewayStack/temp_API/Default/GET/Resource
+  tempAPIdev8DA4D893:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId:
+        Fn::GetAtt:
+          - tempAPI425274BC
+          - RootResourceId
+      PathPart: dev
+      RestApiId:
+        Ref: tempAPI425274BC
+    Metadata:
+      aws:cdk:path: ApigatewayStack/temp_API/Default/dev/Resource
+  tempAPIdevGETB0DAEB39:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: GET
+      ResourceId:
+        Ref: tempAPIdev8DA4D893
+      RestApiId:
+        Ref: tempAPI425274BC
+      AuthorizationType: NONE
+      Integration:
+        Type: MOCK
+    Metadata:
+      aws:cdk:path: ApigatewayStack/temp_API/Default/dev/GET/Resource
+  myVPCLinkA6B7A412:
+    Type: AWS::ApiGateway::VpcLink
+    Properties:
+      Name: ApigatewayStackmyVPCLink195F8A29
+      TargetArns:
+        - Ref: nlbC39469D4
+    Metadata:
+      aws:cdk:path: ApigatewayStack/myVPCLink/Resource
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Modules: aws-cdk=1.14.0,@aws-cdk/assets=1.15.0,@aws-cdk/aws-apigateway=1.15.0,@aws-cdk/aws-applicationautoscaling=1.15.0,@aws-cdk/aws-autoscaling=1.15.0,@aws-cdk/aws-autoscaling-common=1.15.0,@aws-cdk/aws-autoscaling-hooktargets=1.15.0,@aws-cdk/aws-certificatemanager=1.15.0,@aws-cdk/aws-cloudformation=1.15.0,@aws-cdk/aws-cloudwatch=1.15.0,@aws-cdk/aws-ec2=1.15.0,@aws-cdk/aws-ecr=1.15.0,@aws-cdk/aws-ecr-assets=1.15.0,@aws-cdk/aws-ecs=1.15.0,@aws-cdk/aws-ecs-patterns=1.15.0,@aws-cdk/aws-elasticloadbalancingv2=1.15.0,@aws-cdk/aws-events=1.15.0,@aws-cdk/aws-events-targets=1.15.0,@aws-cdk/aws-iam=1.15.0,@aws-cdk/aws-kms=1.15.0,@aws-cdk/aws-lambda=1.15.0,@aws-cdk/aws-logs=1.15.0,@aws-cdk/aws-route53=1.15.0,@aws-cdk/aws-route53-targets=1.15.0,@aws-cdk/aws-s3=1.15.0,@aws-cdk/aws-s3-assets=1.15.0,@aws-cdk/aws-servicediscovery=1.15.0,@aws-cdk/aws-sns=1.15.0,@aws-cdk/aws-sns-subscriptions=1.15.0,@aws-cdk/aws-sqs=1.15.0,@aws-cdk/aws-ssm=1.15.0,@aws-cdk/core=1.15.0,@aws-cdk/cx-api=1.15.0,@aws-cdk/region-info=1.15.0,jsii-runtime=node.js/v13.0.1
+    Condition: CDKMetadataAvailable
+Outputs:
+  tempMyFargateServiceLoadBalancerDNS1A95589E:
+    Value:
+      Fn::GetAtt:
+        - tempMyFargateServiceLBEA4E0DFE
+        - DNSName
+  tempMyFargateServiceServiceURLEDC18869:
+    Value:
+      Fn::Join:
+        - ""
+        - - http://
+          - Fn::GetAtt:
+              - tempMyFargateServiceLBEA4E0DFE
+              - DNSName
+  ExternalDNS:
+    Value:
+      Ref: nlbC39469D4
+    Export:
+      Name: ExternalDNS
+  FargatgeALB:
+    Value:
+      Ref: tempMyFargateServiceLBEA4E0DFE
+    Export:
+      Name: FargatgeALB
+  tempAPIEndpoint1A616EC7:
+    Value:
+      Fn::Join:
+        - ""
+        - - https://
+          - Ref: tempAPI425274BC
+          - .execute-api.
+          - Ref: AWS::Region
+          - "."
+          - Ref: AWS::URLSuffix
+          - /
+          - Ref: tempAPIDeploymentStageprod0CF6067C
+          - /
+Conditions:
+  CDKMetadataAvailable:
+    Fn::Or:
+      - Fn::Or:
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-northeast-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-northeast-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-south-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-southeast-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-southeast-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ca-central-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - cn-north-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - cn-northwest-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-central-1
+      - Fn::Or:
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-north-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-3
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - me-south-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - sa-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-east-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-west-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-west-2
+
