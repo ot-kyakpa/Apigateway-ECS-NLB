@@ -28,7 +28,7 @@
     "@aws-cdk/aws-elasticloadbalancingv2": "^1.15.0",
     "@aws-cdk/core": "^1.14.0",
     "install": "^0.13.0",
-    "npm": "^6.13.0",
+    "npm": "^6.13.4",
     "source-map-support": "^0.5.9"
   }
 }
